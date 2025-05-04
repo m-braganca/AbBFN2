@@ -217,7 +217,7 @@ If you use AbBFN2 in your research, please cite our work:
   author={Bora Guloglu and Miguel Bragan\c{c}a and Alex Graves and Scott Cameron and Timothy Atkinson and Liviu Copoiu},
   journal={bioRxiv},
   year={2025},
-  url={}
+  url={https://www.biorxiv.org/content/10.1101/2025.04.29.651170v1}
 }
 ```
 
