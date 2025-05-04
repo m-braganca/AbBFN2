@@ -214,7 +214,7 @@ If you use AbBFN2 in your research, please cite our work:
 ```bibtex
 @article{Guloglu_etal_AbBFN2,
   title={AbBFN2: A flexible antibody foundation model based on Bayesian Flow Networks},
-  author={Bora Guloglu and Miguel Bragan\c{c}a and Alex Graves and Scott Cameron and Timothy Atkinson and Liviu Copoiu},
+  author={Bora Guloglu and Miguel Bragan\c{c}a and Alex Graves and Scott Cameron and Timothy Atkinson and Liviu Copoiu and Alexandre Laterre and Thomas D Barrett},
   journal={bioRxiv},
   year={2025},
   url={https://www.biorxiv.org/content/10.1101/2025.04.29.651170v1}
