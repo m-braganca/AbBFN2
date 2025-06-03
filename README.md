@@ -47,7 +47,7 @@ conda activate abbfn2
 
 AbBFN2 supports three main generation modes, each with its own configuration file in the `experiments/configs/` directory.
 
-In addition to the mode-specific settings, configuration files contain options for loading model weights. By default (`load_from_hf: true`), weights are downloaded from Hugging Face. Optionally, if you have the weights locally, set `load_from_hf: false` and provide the path in `model_weights_path` (e.g., `/app/params.pkl`).
+By default the weights are downloaded from [Hugging Face](https://huggingface.co/InstaDeepAI/AbBFN2).
 
 ### 1. Unconditional Generation
 Generate novel antibody sequences without any constraints. AbBFN2 will generate natural-like antibody sequences matching its training distribution. Note that the metadata labels are also predictions made by the model. For a discussion of the accuracy of these labels, please refer to the AbBFN2 manuscript.

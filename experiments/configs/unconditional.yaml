@@ -3,10 +3,6 @@ defaults:
   - _self_
 
 cfg:
-  loading:
-    load_from_hf: true
-    model_weights_path: /app/params.pkl # If load_from_hf is false, this path is used to load the model weights.
-
   sampling:
     num_samples_per_batch: 1
     num_batches: 1

@@ -63,7 +63,7 @@ class BFNBase(ABC):
         params = {"noise_schedule": schedule_params}
         return params
 
-    def compute_beta(self, params: Any, t: float) -> Array:
+    def compute_beta(self, t: float) -> Array:
         """Compute the accuracy schedule at time t.
 
         β(t) is monotonically increasing in time such that β(0)=0 and dβ(t)/dt = α(t).
@@ -75,8 +75,6 @@ class BFNBase(ABC):
         Returns:
             Array: Per-variable accuracy schedule values (i.e. has shape with cfg.variables_shape).
         """
-        if "noise_schedule" in params:
-            params = params["noise_schedule"]
         t = jnp.full(self.cfg.variables_shape, fill_value=t)
         return self.noise_schedule.beta(t)
 
@@ -96,7 +94,7 @@ class BFNBase(ABC):
         Returns:
             OutputNetworkPrediction: Prediction of the output network.
         """
-        beta = self.compute_beta(params, t)
+        beta = self.compute_beta(t)
         if "output_network" in params:
             params = params["output_network"]
         return self._apply_output_network_fn(params, theta, t, beta)

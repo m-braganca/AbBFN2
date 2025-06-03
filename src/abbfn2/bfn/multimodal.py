@@ -59,7 +59,7 @@ class MultimodalBFN:
         # Initialise the noise schedule for each BFN.
         noise_schedule_params = {}
         for dm, bfn in self.bfns.items():
-            noise_schedule_params[dm] = bfn.init()["noise_schedule"]
+            noise_schedule_params[dm] = bfn.init()
 
         # Build multimodal output network.
         output_network_fn = BFNMultimodalOutput(
@@ -69,7 +69,7 @@ class MultimodalBFN:
 
         theta = self.get_prior_input_distribution()
         t = 0.5
-        beta = self.compute_beta(noise_schedule_params, t)
+        beta = self.compute_beta(t)
 
         output_network_params = output_network_fn.init(
             key,
@@ -111,13 +111,13 @@ class MultimodalBFN:
         Returns:
             OutputNetworkPredictionMM: Prediction of the output network.
         """
-        beta = self.compute_beta(params, t)
+        beta = self.compute_beta(t)
         if "output_network" in params:
             params = params["output_network"]
         pred = self._apply_output_network_fn(params, theta, t, beta)
         return pred
 
-    def compute_beta(self, params: Any, t: float) -> Array:
+    def compute_beta(self, t: float) -> Array:
         """Compute the accuracy schedule at time t.
 
         β(t) is monotonically increasing in time such that β(0)=0 and dβ(t)/dt = α(t).
@@ -129,12 +129,9 @@ class MultimodalBFN:
         Returns:
             Array: Per-variable accuracy schedule values (i.e. with shape [N]).
         """
-        if "noise_schedule" in params:
-            params = params["noise_schedule"]
         return jax.tree_util.tree_map(
-            lambda bfn, params: bfn.compute_beta(params, t),
+            lambda bfn: bfn.compute_beta(t),
             self.bfns,
-            params,
         )
 
     def sample_sender_distribution(

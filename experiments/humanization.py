@@ -27,15 +27,15 @@ from hydra.utils import instantiate
 from omegaconf import DictConfig, OmegaConf
 from tqdm import tqdm
 
-from abbfn2.bfn import BFN, get_bfn
+
 from abbfn2.data_mode_handler import save_samples
+from abbfn2.huggingface import HFBFN
 from abbfn2.utils.igblast import run_igblast_pipeline
 from abbfn2.utils.inference_utils import (
     configure_output_dir,
     create_fasta_from_sequences,
     flatten_and_crop,
     get_input_samples,
-    load_params,
     pad_and_reshape,
     show_conditioning_settings,
 )
@@ -211,12 +211,8 @@ def main(full_config: DictConfig) -> None:
 
     key = random.PRNGKey(cfg.sampling.seed)
 
-    bfn: BFN = get_bfn(cfg_run.data_mode, cfg_run.output_network)
-    key, bfn_key = random.split(key, 2)
-
-    bfn.init(bfn_key)
-
-    params = load_params(cfg.loading)
+    bfn = HFBFN.from_pretrained("MiguelBraganca/TestDownloads")
+    params = bfn.params
 
     # Initialise the data mode handlers.
     dm_handlers = {

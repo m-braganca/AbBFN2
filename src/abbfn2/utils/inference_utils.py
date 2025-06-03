@@ -372,32 +372,6 @@ def configure_output_dir(
     return local_output_dir
 
 
-def load_params(cfg: DictConfig) -> dict[str, jax.Array]:
-    """Load the parameters from the model weights path or from the Hugging Face Hub.
-
-    Args:
-        cfg (DictConfig): The configuration.
-
-    Returns:
-        dict[str, jax.Array]: The parameters.
-    """
-    if cfg.load_from_hf:
-        file_path = hf_hub_download(
-            repo_id="InstaDeepAI/AbBFN2", filename="model_params.pkl"
-        )
-        with open(file_path, "rb") as f:
-            params = pickle.load(f)
-    else:
-        try:
-            with open(cfg.model_weights_path, "rb") as f:
-                params = pickle.load(f)
-        except FileNotFoundError:
-            raise FileNotFoundError(
-                "No parameters file /app/params.pkl found. Please set load_from_hf to True."
-            )
-    return params
-
-
 def create_fasta_from_sequences(
     l_seq: str, h_seq: str, output_file: str = "sequences.fasta"
 ) -> None:

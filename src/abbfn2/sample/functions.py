@@ -36,6 +36,7 @@ from abbfn2.bfn.types import (
     ThetaMM,
 )
 from abbfn2.sample.schedule import LinearScheduleFn
+from abbfn2.huggingface import HFBFN
 
 
 @dataclass
@@ -58,8 +59,8 @@ class BaseSampleFn(ABC):
         """Check that the BFN model is multimodal."""
         assert isinstance(
             self.bfn,
-            MultimodalBFN,
-        ), "Sampling function only supports multimodal BFN."
+            HFBFN,
+        ), "Sampling function only supports HuggingFace BFN."
 
     def _sample_from_network_prediction(
         self, key: PRNGKey, pred: OutputNetworkPredictionMM
@@ -198,8 +199,8 @@ class SampleFn(BaseSampleFn):
             key_output, key_receiver = jax.random.split(key, 2)
             t_start, t_end = self.time_schedule(i, self.num_steps)
 
-            beta = self.bfn.compute_beta(params, t_start)
-            beta_next = self.bfn.compute_beta(params, t_end)
+            beta = self.bfn.compute_beta(t_start)
+            beta_next = self.bfn.compute_beta(t_end)
             alpha = jax.tree_util.tree_map(lambda b2, b1: b2 - b1, beta_next, beta)
 
             # Update theta from t to t + dt using the network prediction at t.
@@ -623,8 +624,8 @@ class TwistedSDESampleFn(BaseSampleFn):
             t_start, t_end = self.time_schedule(i, self.num_steps)
 
             # Compute noise for t to t + dt.
-            beta = self.bfn.compute_beta(params, t_start)
-            beta_next = self.bfn.compute_beta(params, t_end)
+            beta = self.bfn.compute_beta(t_start)
+            beta_next = self.bfn.compute_beta(t_end)
             alpha = jax.tree_util.tree_map(lambda b2, b1: b2 - b1, beta_next, beta)
 
             # Resample particles with weights from previous step.
@@ -718,8 +719,8 @@ class SDESampleFn(BaseSampleFn):
         """Check that the BFN model is multimodal."""
         assert isinstance(
             self.bfn,
-            MultimodalBFN,
-        ), "Sampling function only supports multimodal BFN, not\n" + str(self.bfn)
+            HFBFN,
+        ), "Sampling function only supports HuggingFace BFN, not\n" + str(self.bfn)
         assert (self.max_score is None) or (
             self.max_score > 0
         ), "max_score must either be None or > 0, not\n" + str(self.max_score)
@@ -780,8 +781,8 @@ class SDESampleFn(BaseSampleFn):
             i, key = xs
             key_output, key_receiver, key_sender = jax.random.split(key, 3)
             t_start, t_end = self.time_schedule(i, self.num_steps)
-            beta = self.bfn.compute_beta(params, t_start)
-            beta_next = self.bfn.compute_beta(params, t_end)
+            beta = self.bfn.compute_beta(t_start)
+            beta_next = self.bfn.compute_beta(t_end)
             alpha = jax.tree_map(lambda b2, b1: b2 - b1, beta_next, beta)
 
             if (x is None) or self.naive:
