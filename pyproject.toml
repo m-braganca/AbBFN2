@@ -24,6 +24,7 @@ dependencies = [
     "omegaconf",
     "tabulate",
     "tqdm",
+    "transformers",
     "h5py==3.11.0",
     "setuptools",
     "regex",

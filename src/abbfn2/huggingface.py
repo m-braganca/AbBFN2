@@ -28,10 +28,10 @@ from abbfn2.bfn.types import OutputNetworkPredictionMM, ThetaMM
 from abbfn2.bfn.factory import get_bfn
 
 
-class BFNMultimodalConfig(PretrainedConfig):
+class FlaxBFNMultimodalConfig(PretrainedConfig):
     """Configuration for the HuggingFace-compatible Multimodal BFN."""
 
-    model_type = "abbfn2_multimodal_bfn"
+    model_type = "multimodal_bfn"
 
     def __init__(
         self,
@@ -40,7 +40,7 @@ class BFNMultimodalConfig(PretrainedConfig):
         **kwargs,
     ):
         """
-        Initialises the BFNMultimodalConfig.
+        Initialises the FlaxBFNMultimodalConfig.
 
         Args:
             bfn_cfgs: A dictionary where keys are data mode names and values are
@@ -53,15 +53,15 @@ class BFNMultimodalConfig(PretrainedConfig):
         self.network_cfg = network_cfg
 
 
-class HFBFN(FlaxPreTrainedModel):
+class FlaxHFBFN(FlaxPreTrainedModel):
     """HuggingFace-compatible wrapper for MultimodalBFN."""
 
-    config_class = BFNMultimodalConfig
+    config_class = FlaxBFNMultimodalConfig
     base_model_prefix = "bfn"
 
     def __init__(
         self,
-        config: BFNMultimodalConfig,
+        config: FlaxBFNMultimodalConfig,
         module: nn.Module = BFNMultimodalOutput,
         seed: int = 0,
         dtype: jnp.dtype = jnp.float32,

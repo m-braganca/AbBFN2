@@ -29,7 +29,7 @@ from tqdm import tqdm
 
 
 from abbfn2.data_mode_handler import save_samples
-from abbfn2.huggingface import HFBFN
+from abbfn2.huggingface import FlaxHFBFN
 from abbfn2.utils.igblast import run_igblast_pipeline
 from abbfn2.utils.inference_utils import (
     configure_output_dir,
@@ -211,7 +211,7 @@ def main(full_config: DictConfig) -> None:
 
     key = random.PRNGKey(cfg.sampling.seed)
 
-    bfn = HFBFN.from_pretrained("MiguelBraganca/TestDownloads")
+    bfn = FlaxHFBFN.from_pretrained("MiguelBraganca/TestDownloads")
     params = bfn.params
 
     # Initialise the data mode handlers.

@@ -36,7 +36,7 @@ from abbfn2.bfn.types import (
     ThetaMM,
 )
 from abbfn2.sample.schedule import LinearScheduleFn
-from abbfn2.huggingface import HFBFN
+from abbfn2.huggingface import FlaxHFBFN
 
 
 @dataclass
@@ -59,7 +59,7 @@ class BaseSampleFn(ABC):
         """Check that the BFN model is multimodal."""
         assert isinstance(
             self.bfn,
-            HFBFN,
+            FlaxHFBFN,
         ), "Sampling function only supports HuggingFace BFN."
 
     def _sample_from_network_prediction(
@@ -719,7 +719,7 @@ class SDESampleFn(BaseSampleFn):
         """Check that the BFN model is multimodal."""
         assert isinstance(
             self.bfn,
-            HFBFN,
+            FlaxHFBFN,
         ), "Sampling function only supports HuggingFace BFN, not\n" + str(self.bfn)
         assert (self.max_score is None) or (
             self.max_score > 0
